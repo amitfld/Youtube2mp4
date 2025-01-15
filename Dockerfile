@@ -1,8 +1,19 @@
 # Use a base Python image
 FROM python:3.12-slim
 
-# Install ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+# Install dependencies, including Chromium
+RUN apt-get update && apt-get install -y \
+    chromium \
+    chromium-driver \
+    libnss3 \
+    libxss1 \
+    libappindicator3-1 \
+    libasound2 \
+    fonts-liberation \
+    && apt-get clean
+
+# Set the Chromium path in environment variables
+ENV CHROME_PATH="/usr/bin/chromium"
 
 # Set the working directory
 WORKDIR /app
@@ -18,6 +29,3 @@ EXPOSE 5000
 
 # Command to run the application
 CMD ["python", "youtube_downloader.py"]
-
-# Install Chromium and its dependencies
-RUN apt-get update && apt-get install -y chromium

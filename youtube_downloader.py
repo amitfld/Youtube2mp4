@@ -4,6 +4,9 @@ import yt_dlp
 import tempfile
 import os
 
+# Set the Chromium path for yt-dlp
+os.environ["CHROME_PATH"] = "/usr/bin/chromium"
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, methods=["POST", "GET"])
 
@@ -30,10 +33,11 @@ def download():
 
     ydl_opts = {
         'format': 'best[ext=mp4]/best',
-        'outtmpl': temp_filepath,  # Save directly to the temporary file
+        'outtmpl': temp_filepath, 
         'quiet': True,
         'nooverwrites': False,
         'cookiesfrombrowser': ('chrome',),
+        'cookiefile': None,
     }
 
     try:
