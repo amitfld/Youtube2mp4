@@ -5,7 +5,7 @@ form.addEventListener('submit', async (event) => {
     const filename = document.getElementById('filename').value;
 
     try {
-        const response = await fetch('https://youtube2mp4.onrender.com', {
+        const response = await fetch('https://youtube2mp4.onrender.com/download', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

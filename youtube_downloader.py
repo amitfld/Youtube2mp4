@@ -30,7 +30,6 @@ def download():
 
     ydl_opts = {
         'format': 'best[ext=mp4]/best',
-        'ffmpeg_location': r'C:\\Users\\amitf\\ffmpeg\\bin',
         'outtmpl': temp_filepath,  # Save directly to the temporary file
         'quiet': True,
         'nooverwrites': False,
