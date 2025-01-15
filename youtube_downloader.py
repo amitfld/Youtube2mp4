@@ -66,7 +66,10 @@ def download():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, threaded=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))  # Get the PORT from the environment
+    app.run(debug=False, host='0.0.0.0', port=port)
+
 
 # In order to run it you need to:
 # run the server:
