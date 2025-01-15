@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube MP4 Downloader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube MP4 Downloader</h1>
+        <p>Enter the URL of the YouTube video and the desired file name:</p>
+        <form id="downloadForm">
+            <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" required>
+            <input type="text" id="filename" placeholder="Enter File Name (without extension)" required>
+            <button type="submit">Download MP4</button>
+        </form>
+        <p>Ensure you have the rights to download the content.</p>
+    </div>
+    <script src="{{ url_for('static', filename='logic.js') }}"></script>
+</body>
+</html>
