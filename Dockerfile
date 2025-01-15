@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y \
     fonts-liberation \
     && apt-get clean
 
+# Create Chromium config directory
+RUN mkdir -p /root/.config/google-chrome
+
 # Set the Chromium path in environment variables
 ENV CHROME_PATH="/usr/bin/chromium"
 
