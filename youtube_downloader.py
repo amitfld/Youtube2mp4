@@ -5,7 +5,7 @@ import tempfile
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}, methods=["POST", "GET"])
 
 @app.route('/')
 def index():
