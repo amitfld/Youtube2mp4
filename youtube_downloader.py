@@ -33,6 +33,7 @@ def download():
         'outtmpl': temp_filepath,  # Save directly to the temporary file
         'quiet': True,
         'nooverwrites': False,
+        'cookiesfrombrowser': ('chrome',),
     }
 
     try:
@@ -58,10 +59,9 @@ def download():
 
         return response
 
-    except Exception as e:
-        import traceback
-        traceback.print_exc()  # Print the full traceback for debugging
-        return jsonify({"error": str(e)}), 500
+    except yt_dlp.utils.DownloadError as e:
+        # Handle yt-dlp errors gracefully
+        return jsonify({"error": f"Failed to process video: {str(e)}"}), 500
 
 
 if __name__ == '__main__':

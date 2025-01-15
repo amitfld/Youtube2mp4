@@ -18,3 +18,6 @@ EXPOSE 5000
 
 # Command to run the application
 CMD ["python", "youtube_downloader.py"]
+
+# Install Chromium and its dependencies
+RUN apt-get update && apt-get install -y chromium
