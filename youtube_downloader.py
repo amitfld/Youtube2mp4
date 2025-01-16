@@ -44,7 +44,7 @@ def download():
         'cookiesfrombrowser': ('chrome', None, os.environ["CHROME_DATA_DIR"]),
         'postprocessors': [{
             'key': 'Exec',
-            'exec_cmd': f"{os.environ['CHROME_EXTRA_ARGS']}"
+            'exec_cmd': '--password-store=basic',
         }],
     }
 

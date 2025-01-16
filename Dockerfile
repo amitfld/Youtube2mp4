@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # Create Chromium config directory
-RUN mkdir -p /root/.config/google-chrome
+RUN mkdir -p /root/.config/google-chrome && chmod 700 /root/.config/google-chrome
 
 # Set permissions for keyring
 RUN chmod 700 /root/.config/google-chrome
