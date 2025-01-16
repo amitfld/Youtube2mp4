@@ -3,6 +3,7 @@ from flask_cors import CORS
 import yt_dlp
 import tempfile
 import os
+import logging
 
 # Set Chromium executable path
 os.environ["CHROME_PATH"] = "/usr/bin/chromium"
@@ -11,6 +12,10 @@ os.environ["CHROME_PATH"] = "/usr/bin/chromium"
 os.environ["CHROME_DATA_DIR"] = "/root/.config/google-chrome"
 
 os.environ["CHROME_EXTRA_ARGS"] = "--password-store=basic"
+
+logging.basicConfig(level=logging.DEBUG)
+logging.debug(f"CHROME_PATH: {os.environ['CHROME_PATH']}")
+logging.debug(f"CHROME_DATA_DIR: {os.environ['CHROME_DATA_DIR']}")
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, methods=["POST", "GET"])
@@ -44,7 +49,7 @@ def download():
         'cookiesfrombrowser': ('chrome', None, os.environ["CHROME_DATA_DIR"]),
         'postprocessors': [{
             'key': 'Exec',
-            'exec_cmd': '--password-store=basic',
+            'exec_cmd': '--password-store=basic',  # Add this argument
         }],
     }
 

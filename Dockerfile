@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     libsecret-1-0 \
     && apt-get clean
 
-# Create Chromium config directory
+# Create Chromium config directory and set permissions
 RUN mkdir -p /root/.config/google-chrome && chmod 700 /root/.config/google-chrome
 
 # Set permissions for keyring
