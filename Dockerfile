@@ -1,7 +1,7 @@
 # Use a base Python image
 FROM python:3.12-slim
 
-# Install dependencies, including Chromium
+# Install Chromium and dependencies, including a keyring for cookies
 RUN apt-get update && apt-get install -y \
     chromium \
     chromium-driver \
@@ -10,10 +10,15 @@ RUN apt-get update && apt-get install -y \
     libappindicator3-1 \
     libasound2 \
     fonts-liberation \
+    gnome-keyring \
+    libsecret-1-0 \
     && apt-get clean
 
 # Create Chromium config directory
 RUN mkdir -p /root/.config/google-chrome
+
+# Set permissions for keyring
+RUN chmod 700 /root/.config/google-chrome
 
 # Set the Chromium path in environment variables
 ENV CHROME_PATH="/usr/bin/chromium"

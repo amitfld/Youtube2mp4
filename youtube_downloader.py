@@ -10,6 +10,8 @@ os.environ["CHROME_PATH"] = "/usr/bin/chromium"
 # Set Chromium data directory
 os.environ["CHROME_DATA_DIR"] = "/root/.config/google-chrome"
 
+os.environ["CHROME_EXTRA_ARGS"] = "--password-store=basic"
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, methods=["POST", "GET"])
 
@@ -36,10 +38,14 @@ def download():
 
     ydl_opts = {
         'format': 'best[ext=mp4]/best',
-        'outtmpl': temp_filepath,  # Save directly to the temporary file
+        'outtmpl': temp_filepath,
         'quiet': True,
         'nooverwrites': False,
-        'cookiesfrombrowser': ('chrome', None, os.environ["CHROME_DATA_DIR"]),  # Use Chromium cookies
+        'cookiesfrombrowser': ('chrome', None, os.environ["CHROME_DATA_DIR"]),
+        'postprocessors': [{
+            'key': 'Exec',
+            'exec_cmd': f"{os.environ['CHROME_EXTRA_ARGS']}"
+        }],
     }
 
     try:
