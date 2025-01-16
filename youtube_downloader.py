@@ -26,34 +26,39 @@ def index():
 
 @app.route('/download', methods=['POST'])
 def download():
-    data = request.json
-    video_url = data.get('url')
-    custom_filename = data.get('filename')
+    try:
+        data = request.json
+        video_url = data.get('url')
+        custom_filename = data.get('filename')
 
-    if not video_url:
-        return jsonify({"error": "No URL provided"}), 400
+        if not video_url:
+            return jsonify({"error": "No URL provided"}), 400
 
-    if not custom_filename:
-        return jsonify({"error": "No file name provided"}), 400
+        if not custom_filename:
+            return jsonify({"error": "No file name provided"}), 400
 
-    # Create a temporary file
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
-    temp_filepath = temp_file.name
-    temp_file.close()  # Close the file so yt_dlp can write to it
+        # Create a temporary file
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+        temp_filepath = temp_file.name
+        temp_file.close()
 
-    ydl_opts = {
-        'format': 'best[ext=mp4]/best',
-        'outtmpl': temp_filepath,
-        'quiet': True,
-        'nooverwrites': False,
-        'cookiesfrombrowser': ('chrome', None, os.environ["CHROME_DATA_DIR"]),
-        'postprocessors': [{
+        logging.debug(f"Temporary file path: {temp_filepath}")
+        logging.debug(f"Video URL: {video_url}")
+        logging.debug(f"Custom filename: {custom_filename}")
+
+        ydl_opts = {
+            'format': 'best[ext=mp4]/best',
+            'outtmpl': temp_filepath,
+            'quiet': True,
+            'nooverwrites': False,
+            'cookiesfrombrowser': ('chrome', None, os.environ["CHROME_DATA_DIR"]),
+            'postprocessors': [{
             'key': 'Exec',
             'exec_cmd': '--password-store=basic',  # Add this argument
-        }],
-    }
 
-    try:
+            }],
+        }
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.extract_info(video_url, download=True)
 
@@ -63,7 +68,7 @@ def download():
 
         # Append ".mp4" to the custom filename
         final_filename = f"{custom_filename}.mp4"
-        print(f"Sending file: {temp_filepath} as {final_filename}")
+        logging.debug(f"Sending file: {temp_filepath} as {final_filename}")
 
         # Send the file to the browser
         response = send_file(temp_filepath, as_attachment=True, download_name=final_filename)
@@ -77,8 +82,11 @@ def download():
         return response
 
     except yt_dlp.utils.DownloadError as e:
-        # Handle yt-dlp errors gracefully
+        logging.error("yt_dlp error:", exc_info=True)
         return jsonify({"error": f"Failed to process video: {str(e)}"}), 500
+    except Exception as e:
+        logging.error("Unexpected server error:", exc_info=True)
+        return jsonify({"error": "Server error", "details": str(e)}), 500
 
 
 if __name__ == '__main__':
